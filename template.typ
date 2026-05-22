@@ -300,7 +300,8 @@
   // 正文字体：中文宋体，西文 Times New Roman，小四号(12pt)
   // 这里使用 NSimSun 因为标准的宋体 SimSun 存在 Fallback 问题，没匹配到 Times New Roman 就会退回到 Noto 而非宋体
   // NSimSun 的所有汉字与标准宋体完全相同，仅修改了字母和数字，但我们正好在正文里字母和数字都用 Times New Roman，所以没有影响
-  set text(font: ("Times New Roman", "NSimSun"), size: 12pt, lang: "zh", region: "cn")
+  //  set text(font: ("Times New Roman", "NSimSun"), size: 12pt, lang: "zh", region: "cn")
+  set text(font: ("Times New Roman", "SimSun"), size: 12pt, lang: "zh", region: "cn")
   // [上一版] Word 1.25 倍行距在小四号字下对应 leading 0.939em，spacing 设置为与 leading 相同对应段前段后 0 行，首行缩进 2 个字
   // 2026 年 4 月 22 日模板再次更新，正文行距变为 1.5 倍。经测量，对应行间距 1.2621em，段间距 1.2621em
   set par(leading: 1.2621em, first-line-indent: (amount: 2em, all: true), spacing: 1.2621em, justify: true)
