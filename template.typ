@@ -356,7 +356,7 @@
         it.body
       }
       set text(font: ("Times New Roman", "SimHei"))
-      fakebold(new-heading)
+      block(sticky: true, fakebold(new-heading))
       v(1.85mm)
     }
   }
@@ -366,7 +366,7 @@
     set text(size: xiaosi)
     set par(first-line-indent: 0pt)
     v(2.10mm)
-    box(inset: (left: 2em), it)
+    block(sticky: true, box(inset: (left: 2em), it))
     v(2.14mm)
   }
 
