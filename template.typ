@@ -329,7 +329,7 @@
 
   // 一级标题：三号，黑体，居中
   show heading.where(level: 1): it => {
-    pagebreak(weak: true, to: "odd")
+    pagebreak(weak: true)
     counter(figure.where(kind: image)).update(0)
     counter(figure.where(kind: table)).update(0)
     counter(figure.where(kind: "algorithm")).update(0)

@@ -14,37 +14,33 @@
   // date: (year: "2026", month: "6"),
   bibliography-file: "reference.bib",
   abstract-cn: [
-    随着数字阵系统任务规模和并发程度不断提高，任务执行过程通常同时依赖天线阵元、CPU 与 GPU 等多类异构资源。传统以静态台账和人工配置为主的资源管理方式难以满足多任务场景下的统一建模、联合调度和过程追踪需求，容易导致资源冲突、利用率不足以及调度过程不可解释等问题。针对上述问题，本文设计并实现了一套基于 Web 的数字阵一体化资源调度管理系统，旨在提升数字阵任务资源管理的统一性、调度过程的自动化程度和运行状态的可观测性。
+    数字阵系统是现代雷达探测、卫星通信和电子对抗等领域的核心装备，其运行过程中天线阵元、CPU 和 GPU 等多类异构资源需要协同配合。随着任务规模和并发程度的提高，传统以人工配置和静态台账为主的管理方式面临三个突出问题：资源状态分散难以形成整体视图，调度决策依赖经验缺乏自动化能力，任务等待和分配过程缺少可追踪的记录。这些问题直接导致资源冲突频发、利用率不足和调度过程不可解释，制约了数字阵系统的多任务并发执行效率。
 
-    系统采用前后端分离架构，后端基于 Spring Boot 多模块结构实现认证鉴权、资源管理、任务管理和调度控制，前端基于 React 与 Vite 实现任务提交、资源监控、调度结果展示和时间线可视化。系统围绕“资源—任务—调度过程”构建数据模型，将天线阵元、CPU 节点、GPU 资源及其分配记录纳入统一管理，并通过任务表、资源表、分配表和调度日志表支撑任务提交、资源分配、状态反馈和结果追踪的完整流程。
+    针对上述问题，本文设计并实现了一套基于 Web 的数字阵一体化资源调度管理系统。系统的核心设计目标是实现异构资源的统一建模、任务驱动的自动化联合调度和调度过程的全程可解释。在资源建模方面，系统将天线阵元的空间拓扑约束、频率冲突关系和复用限制与 CPU/GPU 计算资源的负载状态纳入同一数据模型，使调度器能够同时感知多类资源的可用性。在调度机制方面，系统根据任务的阵元需求、计算需求、优先级、截止时间和依赖关系等特征自动识别任务场景，并选择相应的调度路径，避免了人工选择策略的复杂性和不一致性。在可解释性方面，系统对每次调度决策记录场景标签、算法选择、资源分配方案和等待原因，使用户能够理解任务为何运行、为何等待以及资源如何变化。
 
-    在调度机制方面，系统以任务需求为输入，综合考虑阵元数量、CPU 核数、GPU 显存、任务优先级、截止时间以及依赖关系等约束，自动识别低时延任务、多资源均衡任务、GPU 辅助任务、CPU 密集型任务和依赖约束任务等典型场景，并据此选择不同的内部调度路径。针对阵元资源，系统支持单阵面优先和跨阵面扩展分配；针对计算资源，系统支持紧凑式 CPU 分配、负载均衡式 CPU 分配和 GPU 单卡局部性分配。同时，系统通过调度日志、剩余时间写回和时间片反馈机制，对任务运行、等待、更新和完成释放过程进行持续记录，提升调度过程的可解释性。
-
-    在系统实现基础上，本文构建了多类典型测试场景，对系统的场景识别、联合资源分配和等待处理能力进行了验证。实验结果表明，系统能够根据任务特征选择差异化调度路径，在 CPU 密集型场景下实现多节点负载均衡，在 GPU 场景下实现单卡局部性分配，在依赖不满足场景下正确阻塞任务并记录等待原因。本文实现的系统完成了数字阵资源从静态管理向任务驱动的动态联合调度管理的转变，为数字阵任务资源协同调度提供了一种具有工程可行性的实现方案。
+    实验结果表明，系统能够在多任务并发条件下正确识别不同场景并执行差异化调度，各天线调度算法在速度、可行性和解质量三个维度上各有侧重，验证了多算法自动选择策略的合理性。本文实现的系统完成了数字阵资源从静态管理向任务驱动的动态联合调度管理的转变，为数字阵多资源协同调度提供了一种具有工程可行性的实现方案。
   ],
   keywords-cn: ("数字阵", "资源调度", "联合调度", "异构资源", "Web系统"),
   abstract-en: [
-    With the increasing scale and concurrency of tasks in digital array systems, task execution often depends on multiple types of heterogeneous resources, including antenna elements, CPU nodes, and GPU resources. Traditional resource management methods, which mainly rely on static resource records and manual configuration, are insufficient for unified modeling, coordinated scheduling, and process tracing in multi-task scenarios. These limitations may lead to resource conflicts, low utilization, and poor interpretability of scheduling decisions. To address these problems, this thesis designs and implements a Web-based integrated resource scheduling and management system for digital arrays, aiming to improve the consistency of resource management, the automation of scheduling, and the observability of task execution.
+    Digital array systems serve as core equipment in modern radar detection, satellite communication, and electronic countermeasure applications. During operation, multiple types of heterogeneous resources, including antenna elements, CPU nodes, and GPU accelerators, must work in coordination. As task scale and concurrency continue to grow, traditional management approaches based on manual configuration and static records face three prominent challenges: scattered resource states that lack a unified view, scheduling decisions that rely on human experience without automation, and task waiting and allocation processes that lack traceable records. These issues directly lead to frequent resource conflicts, underutilization, and unexplainable scheduling behavior, limiting the multi-task execution efficiency of digital array systems.
 
-    The system adopts a front-end and back-end separated architecture. The back end is implemented with a Spring Boot multi-module structure, providing authentication, resource management, task management, and scheduling control. The front end is implemented with React and Vite, supporting task submission, resource monitoring, scheduling result display, and timeline visualization. Centered on the relationship among resources, tasks, and scheduling processes, the system establishes a unified data model for antenna elements, CPU nodes, GPU resources, and allocation records. Task tables, resource tables, allocation tables, and scheduling log tables are used to support the complete workflow of task submission, resource allocation, state feedback, and result tracing.
+    To address these challenges, this thesis designs and implements a Web-based integrated resource scheduling and management system for digital arrays. The core design objectives are unified modeling of heterogeneous resources, task-driven automated joint scheduling, and full interpretability of scheduling processes. In terms of resource modeling, the system incorporates the spatial topology constraints, frequency conflict relations, and reuse limits of antenna elements together with the load states of CPU/GPU computing resources into a single data model, enabling the scheduler to perceive the availability of all resource types simultaneously. In terms of scheduling mechanism, the system automatically identifies task scenarios based on antenna demand, computing requirements, priority, deadline, and dependency relations, and selects corresponding scheduling paths accordingly, eliminating the complexity and inconsistency of manual strategy selection. In terms of interpretability, the system records scenario labels, algorithm selections, resource allocation plans, and waiting reasons for each scheduling decision, allowing users to understand why a task is running, waiting, or how resources have changed.
 
-    In terms of scheduling mechanism, the system takes task requirements as input and comprehensively considers constraints such as the number of required antenna elements, CPU cores, GPU memory, task priority, deadline, and dependency relations. Based on these constraints, it automatically identifies typical scenarios including low-latency tasks, balanced multi-resource tasks, GPU-assisted tasks, CPU-intensive tasks, and dependency-constrained tasks, and then selects different internal scheduling paths accordingly. For antenna resources, the system supports single-surface priority allocation and cross-surface expansion allocation. For computing resources, it supports packed CPU allocation, load-balanced CPU allocation, and single-card GPU locality allocation. Meanwhile, scheduling logs, remaining-time write-back, and time-slice feedback mechanisms are introduced to continuously record task running, waiting, updating, and completion-release processes, thereby improving the interpretability of scheduling behavior.
-
-    Based on the implemented system, several typical test scenarios are constructed to verify the system’s capabilities in scenario identification, joint resource allocation, and waiting-state handling. The experimental results show that the system can select differentiated scheduling paths according to task characteristics. It achieves multi-node load balancing in CPU-intensive scenarios, single-card locality allocation in GPU-related scenarios, and correct task blocking with recorded waiting reasons when dependencies are not satisfied. The implemented system realizes the transformation from static resource management to task-driven dynamic joint scheduling, providing an engineering-feasible solution for coordinated resource scheduling in digital array systems.
+    Experimental results demonstrate that the system correctly identifies different scenarios and executes differentiated scheduling under multi-task concurrent conditions. The antenna scheduling algorithms exhibit distinct strengths across speed, feasibility, and solution quality, validating the rationality of the multi-algorithm automatic selection strategy. The implemented system achieves the transformation from static resource management to task-driven dynamic joint scheduling, providing an engineering-feasible solution for coordinated multi-resource scheduling in digital array systems.
   ],
   keywords-en: ("digital array", "resource scheduling", "heterogeneous resource", "Web-based system"),
   acknowledgements: [
-    时光匆匆，转眼间本科阶段的学习生活即将结束。回顾毕业设计从选题、系统开发到论文撰写的全过程，我在不断查阅资料、修改方案、调试系统和完善论文的过程中收获了许多。毕业设计不仅是对大学所学知识的一次综合运用，也是对自身分析问题、解决问题和持续改进能力的一次锻炼。在论文即将完成之际，谨向所有给予我帮助和支持的老师、同学和家人表示诚挚的感谢。
+    本科的生活将结束于这个夏天。任何东西，一旦在夏天终结、破碎，就拥有了一层高温的矫饰，有时候这是好事情，比如分手和生命的逝去，一个晴天可以不错地晒褪事件的郁结；有时候这是一件刚好的事情，比如我的毕业，一段明媚疏朗的日子里，我就要挥别这差不多痛苦的五年。
 
-    首先，衷心感谢我的指导教师胡鹤飞老师。在毕业设计的选题、开题、系统设计和论文撰写过程中，胡老师给予了我耐心的指导和宝贵的建议。从课题方向的确定，到系统功能的梳理，再到论文结构和内容表达的完善，老师都提出了许多具有针对性的意见，使我能够逐步明确研究目标，改进系统设计，并不断提升论文质量。老师严谨认真的治学态度和负责耐心的指导方式，使我受益匪浅。
+    通信工程，听起来完全是一份匠人的手艺，一只手编程，一只手高温焊，在电子和实体之间桥接。我想，掌握了通信工程，一定是一件吃穿不愁、风度翩翩的事情————这实际上也是事实，只不过仅仅发生在我身边那些独具慧根、鸢飞戾天的同学身上。于是到大二，连数分和线代都学得异常吃力的我，不再认为自己是一个擅于学习的人了。这样的认知首先是带来了沮丧，随后摧枯拉朽地焚毁了我生活的其他角落：人际关系、与学业无关的那些技术——好像任何事在我手上都无法善终。几乎每一天，我在算式和电路图上憋到紧咬牙关、脸红气粗的时候，都在祈求大学的生活赶紧结束，让那些在通信之路上谈笑风生的朋友们尽早飞跃，让我如同一块狡猾的肥皂，顺便从这沸腾的澡堂滑离吧。
 
-    感谢北京邮电大学信息与通信工程学院各位老师在本科阶段对我的培养。四年的课程学习和实践训练，使我逐步建立了通信工程、软件开发和系统设计等方面的知识基础，也为本次毕业设计的完成提供了重要支撑。在专业课程、实验实践和项目训练中获得的知识与方法，帮助我更好地理解数字阵系统资源管理、多资源调度以及 Web 系统开发等相关内容。
+    为了结束大学生涯，我早早计划就业，当然就业之旅也是异常坎坷，但是哪怕留级一年，我也要去上班。没有想象中的狂喜，收到 offer ，答辩结束的时刻我平静地和朋友谈起我喜欢的舞者和最近的活动————人生的转折阒静无声，这一天悄悄地到来了。
 
-    感谢同学和朋友们在毕业设计过程中的帮助与陪伴。在系统开发、论文撰写和问题讨论过程中，大家给予了我很多建议和鼓励，也在资料查找、技术交流和论文修改等方面提供了支持。正是这些交流和讨论，使我能够从不同角度审视自己的系统设计和论文表达，并不断完善不足之处。
+    不过我知道，还有无数我不热衷、我不熟练的事亟待降临，我只是在浩大的监区里办理了一次转院。罢了，太多细碎酸楚不必多言，今天是轻微庆功酬谢的日子，我要谢谢的人类有我自己、母亲、欣然、邓明韬，要谢谢的事物有已经离去的球赛、完美的音乐、夜晚的舞蹈。
 
-    同时，感谢我的家人在大学期间给予我的理解、支持和鼓励。无论是在学习生活中，还是在毕业设计较为紧张的阶段，家人的关心都给了我持续前进的动力，使我能够更加安心地完成学业和论文工作。
+    现在，重要的不再是那些狂喜或极悲的记忆，不再是上空盘桓不去的奥德赛时刻，而是，转院时，那份签订一切手续的沉默与勇气。
 
-    最后，感谢在论文完成过程中参考过的相关文献、开源技术和开发工具。它们为本文系统设计与实现提供了重要参考，也使我能够在已有研究和工程实践基础上完成自己的毕业设计。由于本人能力和经验有限，论文和系统中仍难免存在不足之处，恳请各位老师批评指正。
+
   ],
 
 appendix: [
@@ -83,6 +79,8 @@ appendix: [
 目前，部分数字阵或实验平台中的资源管理仍以静态台账、人工配置或单独模块管理为主。这类方式在任务规模较小时可以满足基本需求，但在多任务并发和资源状态动态变化的场景下存在明显不足。一方面，天线阵元、CPU 和 GPU 等资源缺乏统一表达，难以形成面向任务需求的整体资源视图；另一方面，调度过程依赖人工经验，缺少对任务等待原因、资源分配过程和任务状态变化的持续记录，导致系统运行过程不够透明，后续分析和复盘也较为困难。
 
 因此，设计并实现一套基于 Web 的数字阵一体化资源调度管理系统具有较强的现实意义。通过对天线阵元、CPU 和 GPU 等资源进行统一建模，并结合任务需求进行联合调度，可以提升资源分配的合理性和任务响应能力；通过引入调度日志、状态反馈和可视化展示，可以增强调度过程的可解释性和系统运行的可观测性。该课题不仅有助于降低人工管理成本、提升资源利用率，也能够综合体现资源建模、调度策略设计、前后端系统实现和实验验证等毕业设计要求。
+
+需要说明的是，实际数字阵系统中，任务到天线物理层之间通常还存在波束形成、信号处理和通道映射等多个中间层。本系统的定位不是替代这些中间层的功能，而是在资源编排与调度决策层面进行工作。具体而言，系统解决的是"任务需要多少阵元、哪些阵元当前可用、如何分配最合理"这一层的管理与决策问题，属于物理层之上的资源调度抽象层。系统通过分配记录中的波束频率、阵面归属等信息为下层波束形成和通道配置提供输入参数接口，但不直接控制射频信号链路和物理层行为。这种分层设计使系统能够专注于调度逻辑的正确性和可解释性，同时保持与底层硬件控制模块之间的解耦。
 
 == 国内外研究现状
 
@@ -901,14 +899,14 @@ end
 在资源状态展示方面，前端首先提供天线资源状态展示界面。该界面以资源地图的形式展示物理天线、天线单元、活跃单元和未绑定父级单元等统计信息，并通过物理天线列表展示各天线所属阵面、在线状态和包含的天线单元数量。该界面能够帮助用户直观了解天线资源的整体规模和当前状态，为任务调度中的阵元资源判断提供可视化依据，如 @fig:frontend-antenna-resource[] 所示。
 
 #figure(
-  image("images/6.png", width: 85%),
+  image("images/03-resource-antenna.png", width: 75%),
   caption: [天线资源状态展示界面],
 ) <fig:frontend-antenna-resource>
 
 除天线阵元资源外，系统还提供 CPU/GPU 计算资源展示界面。该界面将 CPU 节点和 GPU 节点分区展示，能够显示计算节点数量、节点 IP、核心数、GPU 型号、显存容量和在线状态等信息。通过该界面，用户可以快速查看当前计算资源的整体负载和可用情况，为理解 CPU 密集型任务、GPU 辅助任务的调度结果提供支撑，如 @fig:frontend-compute-resource[] 所示。
 
 #figure(
-  image("images/7.png", width: 85%),
+  image("images/03-resource-compute.png", width: 75%),
   caption: [CPU/GPU 资源状态展示界面],
 ) <fig:frontend-compute-resource>
 
@@ -919,7 +917,7 @@ end
 任务调度详情界面还能够展示第四章中的场景识别结果和自动决策目标。例如，任务被识别为 GPU 辅助任务时，界面可以展示对应的 GPU 分配结果、CPU 分配方案、阵面选择结果以及决策原因。用户不需要了解后端具体调用了哪一种搜索算法，也可以通过解释性文本理解系统为什么采用当前调度路径。如 @fig:frontend-schedule-timeline[] 所示，系统在任务详情中展示了 CPU 方案、GPU 卡、阵面信息、决策原因和调度时间线，体现了调度过程的可解释性。
 
 #figure(
-  image("images/8.png", width: 85%),
+  image("images/04-task-detail-page.png", width: 75%),
   caption: [任务调度时间线与决策结果展示界面],
 ) <fig:frontend-schedule-timeline>
 
